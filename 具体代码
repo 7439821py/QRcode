@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>公章台账查询</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+    font-family: -apple-system, 'Helvetica Neue', sans-serif;
+    padding: 40px 16px;
+    text-align: center;
+    background: #f5f5f5;
+}
+.box {
+    background: #fff;
+    border-radius: 16px;
+    padding: 32px 24px;
+    max-width: 360px;
+    margin: 0 auto;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+}
+h2 { color: #333; font-size: 20px; margin-bottom: 24px; }
+.row { display: flex; gap: 10px; justify-content: center; }
+input {
+    flex: 1; max-width: 200px; padding: 12px 14px;
+    font-size: 17px; border: 1px solid #ddd; border-radius: 10px; outline: none;
+}
+input:focus { border-color: #07c160; }
+button {
+    padding: 12px 22px; font-size: 17px; border: none;
+    background: #07c160; color: #fff; border-radius: 10px;
+    cursor: pointer; font-weight: 600;
+}
+#out { margin-top: 24px; font-size: 28px; font-weight: bold; color: #333; min-height: 40px; }
+#out .label { font-size: 16px; font-weight: normal; color: #999; }
+#out .err { color: #ff4d4f; font-size: 18px; }
+</style>
+</head>
+<body>
+
+<div class="box">
+    <h2>📋 查询公司公章</h2>
+    <div class="row">
+        <input type="text" id="key" placeholder="输入公司名">
+        <button onclick="go()">查询</button>
+    </div>
+    <div id="out"></div>
+</div>
+
+<script>
+var data = {
+    '灿启':'柜02 编号01',
+    '德棋':'柜02 编号02',
+    '浩智':'柜02 编号03',
+    '升泽':'柜02 编号04',
+    '常源':'柜02 编号05',
+    '诗予':'柜02 编号06',
+    '璟澈':'柜02 编号07',
+    '星途':'柜02 编号08',
+    '今禾':'柜02 编号09',
+    '博靖':'柜02 编号10',
+    '郑州载望文化传媒':'柜03 编号01',
+    '郑州载望升学教育':'柜03 编号02',
+    '河南载望升学企业':'柜03 编号03',
+    '晨珂':'柜03 编号04',
+    '小步快走':'柜03 编号05',
+    '安稳如山':'柜03 编号06',
+    '海安畅合':'柜03 编号07',
+    '自然选择':'柜03 编号08',
+    '郑州载望教育咨询公+财':'柜03 编号09',
+    '楠泽':'柜04 编号01',
+    '慧芽':'柜04 编号02',
+    '思锦':'柜04 编号03',
+    '领途':'柜04 编号04',
+    '优学':'柜04 编号05',
+    '云汉':'柜04 编号06',
+    '景程':'柜04 编号07',
+    '乐与':'柜04 编号08',
+    '临风':'柜04 编号09',
+    '知年':'柜04 编号10',
+    '卓聚':'柜05 编号01',
+    '知轲':'柜05 编号02',
+    '明熙':'柜05 编号03',
+    '思初':'柜05 编号04',
+    '靖研':'柜05 编号05',
+    '勃硕':'柜05 编号06',
+    '希杭':'柜05 编号07',
+    '如轩':'柜05 编号08',
+    '知言':'柜05 编号09',
+    '知州':'柜05 编号10',
+    '亨创':'柜06 编号01',
+    '同晷':'柜06 编号02',
+    '木屿':'柜06 编号03',
+    '升浩':'柜06 编号04',
+    '慕浩':'柜06 编号05',
+    '韧石':'柜06 编号06',
+    '澄宇':'柜06 编号07',
+    '韶安':'柜06 编号08',
+    '识流':'柜06 编号09',
+    '星秩':'柜06 编号10',
+    '舒艺':'柜12 编号01',
+    '启耀':'柜12 编号02',
+    '霜鉴':'柜12 编号03',
+    '知淼':'柜12 编号04',
+    '思庐':'柜12 编号05',
+    '真知纪':'柜12 编号06',
+    '锦研':'柜12 编号07',
+    '斯言':'柜12 编号08',
+    '清瑜':'柜12 编号09',
+    '穹擎':'柜12 编号10',
+    '微抖':'柜13 编号01',
+    '熵减':'柜13 编号02',
+    '呱唧猫':'柜13 编号03',
+    '悦汇':'柜13 编号04',
+    '雄州':'柜13 编号05',
+    '流丹':'柜13 编号06',
+    '千丝缕':'柜13 编号07',
+    '新融媒体':'柜13 编号08',
+    '北辰':'柜13 编号09',
+    '蓝图':'柜13 编号10',
+    '物华':'柜14 编号01',
+    '留学':'柜14 编号02',
+    '笃志':'柜14 编号03',
+    '流水':'柜14 编号04',
+    '朱华':'柜14 编号05',
+    '切问':'柜14 编号06',
+    '近思':'柜14 编号07',
+    '博冠':'柜14 编号08',
+    '博学':'柜14 编号09',
+    '载望笃志':'柜14 编号10',
+    '留学合同章':'柜14 编号11',
+    '秉轴':'柜14 编号12',
+    '墨典':'柜14 编号13',
+    '传媒科技':'柜15 编号01',
+    '三心':'柜15 编号02',
+    '学业科技':'柜15 编号03',
+    '循砺':'柜15 编号04',
+    '协宸':'柜15 编号05',
+    '韧石科技':'柜15 编号06',
+    '兰台':'柜15 编号07',
+    '澄观':'柜15 编号08',
+    '敦孚':'柜15 编号09',
+    '星妙':'柜15 编号10',
+    '创想界公+合同':'柜16 编号01',
+    '洛阳茂海':'柜16 编号02',
+    '初尧':'柜16 编号03',
+    '郑州智晖公+合同':'柜16 编号04',
+    '洛阳智晖':'柜16 编号05',
+    '郑州茂海公+合同':'柜16 编号06',
+    '孚翼':'柜16 编号07',
+    '学业有成':'柜16 编号08',
+    '载望图书公+合同':'柜16 编号09',
+    '云启航':'柜16 编号10',
+    '祥悦坊':'柜16 编号11'
+};
+
+function go() {
+    var k = document.getElementById('key').value.trim();
+    var out = document.getElementById('out');
+
+    if (!k) { out.innerHTML = ''; return; }
+
+    var r = data[k];
+
+    // 去末尾编号再查（如 灿启01 → 灿启）
+    if (!r) {
+        var m = k.match(/^(.+?)(\d{1,2})$/);
+        if (m) r = data[m[1]];
+    }
+
+    if (r) {
+        out.innerHTML = r;
+    } else {
+        out.innerHTML = '<span class="err">未找到该公司</span>';
+    }
+}
+
+document.getElementById('key').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') go();
+});
+</script>
+
+</body>
+</html>
