@@ -29,8 +29,8 @@ with sync_playwright() as p:
     page = context.new_page()
 
     page.goto('https://ss.erp321.com/profit-report/multi-dimension')
-    page.fill("input[placeholder='邮箱地址/手机号码']", "18595916394")
-    page.fill("input[placeholder='请输入密码']", "CAOyaru0110..")
+    page.fill("input[placeholder='邮箱地址/手机号码']", "xxxxxx")
+    page.fill("input[placeholder='请输入密码']", "xxxxxx")
     page.click('input[class="ant-checkbox-input"]')
     time.sleep(random.uniform(0.4,1))
     page.get_by_text('立即登录').click()
