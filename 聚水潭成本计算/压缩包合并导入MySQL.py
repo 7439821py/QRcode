@@ -14,10 +14,10 @@ ROOT_FOLDER = r"C:\Users\Administrator\Desktop\聚水潭\2026-06-11"
 
 # MySQL 连接信息
 MYSQL_CONFIG = {
-    "host": "rm-bp15cq68x1sw64kfs7o.mysql.rds.aliyuncs.com",
-    "user": "wangyongqi",
-    "password": "wyq123456",
-    "database": "amount_flow",
+    "host": "xxxxxxxxxxx",
+    "user": "xxxxxx",
+    "password": "xxxxxx",
+    "database": "xxxxxx",
     "port": 3306,
     "charset": "utf8mb4"
 }
